@@ -1,2 +1,3 @@
 # gocrypto
-Simplified encryption/decryption API's
+# About 
+Simplified encryption/decryption API's in GO.
