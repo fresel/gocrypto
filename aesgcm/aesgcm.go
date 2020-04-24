@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	errorPrefix ="gocrypto: aesgcm: "
+	errorPrefix           = "gocrypto: aesgcm: "
 	KeySize128Bit KeySize = 16
 	KeySize256Bit KeySize = 32
 )
@@ -29,7 +29,7 @@ type KeySize int
 
 // mergeError merges to errors.
 //
-// Useful when
+// Useful when adding external error to the context error.
 func mergeError(first error, second error) error {
 	firstString := first.Error()
 	secondString := second.Error()
