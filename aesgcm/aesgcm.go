@@ -117,5 +117,7 @@ func Decrypt(key, message []byte) ([]byte, error) {
 	if nil != err {
 		return nil, mergeError(errorMsgDecrypt, err)
 	}
-	return open, errorMsgDecrypt
+
+	// Ok, return
+	return open, nil
 }
