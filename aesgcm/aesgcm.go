@@ -9,12 +9,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strconv"
 )
 
 const (
-	errorPrefix           = "gocrypto: aesgcm: "
-	KeySize128Bit KeySize = 16
-	KeySize256Bit KeySize = 32
+	errorPrefix = "gocrypto: aesgcm: "
 )
 
 var (
@@ -23,6 +22,13 @@ var (
 	errorMsgDecrypt   = errors.New(errorPrefix + "decryption failed")
 	errorMsgCreateKey = errors.New(errorPrefix + "key creation failed")
 )
+
+// Size in bytes when encoding/decoding
+var validKeySizes = map[string]int{
+	"128": 16, // 128 bit
+	"192": 24, // 192 bit
+	"256": 32, // 256 bit
+}
 
 // Size of key in bytes
 type KeySize int
@@ -50,8 +56,12 @@ func createNonce(size int) ([]byte, error) {
 // This function should be used by applications importing this lib.
 // E.g by servers where the key must be known to the clients where encryption
 // is involved.
-func CreateKey(size KeySize) ([]byte, error) {
-	key := make([]byte, size)
+func CreateKey(size int) ([]byte, error) {
+	i, ok := validKeySizes[strconv.Itoa(size)]
+	if !ok {
+		return nil, errors.New(fmt.Sprintf("Key size %d is invalid", size))
+	}
+	key := make([]byte, i)
 	if _, err := io.ReadFull(rand.Reader, key); nil != err {
 		return nil, mergeError(errorMsgCreateKey, err)
 	}
